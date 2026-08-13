@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,6 +24,8 @@ body{font-family:'Inter',sans-serif;background:var(--canvas);color:var(--ink);li
 .hdr{padding:24px 40px;display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto;}
 .logo{font-family:'Fraunces',serif;font-size:20px;color:var(--ink);letter-spacing:.01em;}
 .hdr-note{font-size:12px;color:var(--ink3);letter-spacing:.08em;text-transform:uppercase;}
+.login-link{font-size:13px;font-weight:500;color:var(--ink);text-decoration:none;border:1.5px solid var(--canvas3);padding:8px 18px;border-radius:6px;transition:all .18s;white-space:nowrap;}
+.login-link:hover{border-color:var(--ink);background:var(--white);}
 
 .hero{max-width:1100px;margin:0 auto;padding:60px 40px 40px;display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:center;}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:20px;}
@@ -86,6 +89,7 @@ h1 em{font-style:italic;font-weight:400;color:var(--teal);}
   .features{grid-template-columns:1fr;}
   .demo{display:none;}
   h1{font-size:32px;}
+  .hdr-note{display:none;}
 }
 </style>
 </head>
@@ -93,7 +97,10 @@ h1 em{font-style:italic;font-weight:400;color:var(--teal);}
 
 <div class="hdr">
   <div class="logo">Novium</div>
-  <div class="hdr-note">Launching August 2026</div>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <div class="hdr-note">Launching August 2026</div>
+    <a href="https://app.getnovium.com" class="login-link">Log In →</a>
+  </div>
 </div>
 
 <div class="hero">
