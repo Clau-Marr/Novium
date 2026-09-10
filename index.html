@@ -92,7 +92,34 @@ h1 em{font-style:italic;font-weight:400;color:var(--teal);}
   .hdr-note{display:none;}
 }
 </style>
-</head>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabaseClient = supabase.createClient(
+    'https://vgwgbpjhxugyshlezjzh.supabase.co',
+    'sb_publishable_ORhpfM5JPtpcEy01hohzLA_dpxQ6QpB'
+  );
+
+  async function joinWaitlist(event, formId) {
+    event.preventDefault();
+    const emailInput = document.getElementById(formId + '-email');
+    const statusMsg = document.getElementById(formId + '-status');
+    const email = emailInput.value.trim();
+
+    if (!email) return;
+
+    statusMsg.textContent = 'Submitting...';
+
+    const { error } = await supabaseClient.from('waitlist').insert([{ email: email }]);
+
+    if (error) {
+      statusMsg.textContent = "Something went wrong. Please try again.";
+      console.error(error);
+    } else {
+      statusMsg.textContent = "You're on the list! We'll email you at launch.";
+      emailInput.value = '';
+    }
+  }
+</script></head>
 <body>
 
 <div class="hdr">
@@ -109,9 +136,11 @@ h1 em{font-style:italic;font-weight:400;color:var(--teal);}
     <h1>Stop typing your<br>assignments <em>twice.</em></h1>
     <p class="sub">Novium reads your calendar and turns it straight into accurate, agency-ready invoices — rate cards, minimum-hour guarantees, and mileage included automatically. Built for freelance language interpreters, by one.</p>
     <div class="cta-row">
-      <a class="btn btn-primary" href="mailto:masprofessionalservices.office@gmail.com?subject=Notify%20me%20when%20Novium%20launches&body=Hi%2C%20I%27d%20like%20to%20be%20notified%20when%20Novium%20launches.">
-        Get notified at launch →
-      </a>
+    <form onsubmit="joinWaitlist(event, 'top')" style="display:flex;gap:8px;flex-wrap:wrap;">
+  <input type="email" id="top-email" required placeholder="you@email.com" style="padding:10px 14px;border-radius:6px;border:1px solid #ccc;flex:1;min-width:200px;">
+  <button type="submit" style="padding:10px 20px;border-radius:6px;background:#1a7a6e;color:white;border:none;cursor:pointer;">Get notified at launch →</button>
+</form>
+<div id="top-status" style="font-size:13px;margin-top:8px;"></div>
     </div>
     <div class="cta-hint">No spam — just one email when it's ready.</div>
   </div>
@@ -161,9 +190,11 @@ h1 em{font-style:italic;font-weight:400;color:var(--teal);}
 <div class="signoff">
   <h2>Built while doing the work.</h2>
   <p>Novium started as one interpreter's own invoicing system — refined through real assignments, real agencies, and real payments before anyone else touched it.</p>
-  <a class="btn btn-primary" href="mailto:masprofessionalservices.office@gmail.com?subject=Notify%20me%20when%20Novium%20launches&body=Hi%2C%20I%27d%20like%20to%20be%20notified%20when%20Novium%20launches.">
-    Get notified at launch →
-  </a>
+  <form onsubmit="joinWaitlist(event, 'bottom')" style="display:flex;gap:8px;flex-wrap:wrap;">
+  <input type="email" id="bottom-email" required placeholder="you@email.com" style="padding:10px 14px;border-radius:6px;border:1px solid #ccc;flex:1;min-width:200px;">
+  <button type="submit" style="padding:10px 20px;border-radius:6px;background:#1a7a6e;color:white;border:none;cursor:pointer;">Get notified at launch →</button>
+</form>
+<div id="bottom-status" style="font-size:13px;margin-top:8px;"></div>
 </div>
 
 <div class="ftr">
