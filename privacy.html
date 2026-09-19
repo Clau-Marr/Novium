@@ -34,7 +34,7 @@ a{color:var(--teal);}
 <div class="wrap">
   <div class="card">
     <h1>Privacy Policy</h1>
-    <div class="updated">Last updated: September 15, 2026</div>
+    <div class="updated">Last updated: September 19, 2026</div>
 
     <p>Novium ("the App") is a billing and payment-tracking tool built for independent freelance interpreters. This policy explains what information the App accesses, how it's stored, and how it's used.</p>
 
@@ -54,13 +54,15 @@ a{color:var(--teal);}
     <h2>Information accessed through Google</h2>
     <p>If you choose to connect your Google account, the App requests the following permissions, used only for the specific purposes below:</p>
     <ul>
-      <li><strong>Google Calendar (read-only):</strong> to read your calendar events so the App can import them as billable assignments. The App never creates, edits, or deletes anything on your calendar.</li>
-      <li><strong>Gmail (compose):</strong> to let you send invoices as emails from your own Gmail account, with your review before anything is sent. The App cannot read your existing emails, and can only send messages you've explicitly composed and initiated within the App.</li>
-      <li><strong>Google Drive (per-file access):</strong> to create and update a single backup file in your Drive, so your data isn't lost if your browser storage is cleared. The App cannot see, access, or modify any other file in your Drive — only files it creates itself.</li>
+      <li><strong>Google Calendar events (read-only):</strong> to read the events (title, date, and start and end time) on your primary calendar so the App can import them as billable assignments. The App never creates, edits, or deletes anything on your calendar. Assignment details imported from your calendar, including any patient names in event titles, are stored in your Novium account as described above.</li>
+      <li><strong>Gmail (send-only):</strong> to let you send invoices as emails from your own Gmail account. Novium requests this permission only when you choose to email an invoice. It can send only messages you write and review in the App, and it cannot read, search, or delete any email.</li>
+      <li><strong>Google Drive (per-file access):</strong> to save up to three rolling backup files in a folder named "Novium Backups" that the App creates in your Drive, so your data isn't lost if your browser storage is cleared. When a fourth backup is saved, the oldest is deleted. The App cannot see, access, or modify any other file in your Drive — only files it creates itself.</li>
+      <li><strong>Basic profile (name and email address):</strong> to show which Google account is connected to the App.</li>
     </ul>
 
     <h2>Google API Services User Data Policy</h2>
     <p>Novium's use and transfer of information received from Google APIs to any other app will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+    <p>We use information received from Google only to provide the features described above. We do not use it for advertising, and we do not sell it. No person at Novium reads your Google data unless you ask us to for support, it is needed for security or to investigate abuse, or the law requires it.</p>
 
     <h2>Payment processing</h2>
     <p>Subscription payments are processed by Stripe, a third-party payment processor. When you subscribe, your payment card details are entered directly with Stripe and are never stored on or transmitted through Novium's own servers. Stripe uses this information solely to process your payment and manage your subscription, in accordance with Stripe's own privacy policy. Novium retains only the subscription status and billing history needed to manage your account (e.g., which plan you're on and whether payment is current) — not your card details.</p>
@@ -77,7 +79,7 @@ a{color:var(--teal);}
     <p>We retain your data for as long as your account is active. If you cancel your subscription, your data remains accessible in a read-only state for 30 days, after which it may be permanently deleted unless you request otherwise. If you request deletion at any time (see below), we will delete your data within 30 days, except where a short retention period is required to comply with legal, tax, or accounting obligations.</p>
 
     <h2>Your control over your data</h2>
-    <p>You can disconnect your Google account at any time from within the App. You can download a full copy of your data at any time from within the App.</p>
+    <p>You can disconnect your Google account at any time from within the App, which also revokes the App's access at Google. You can also remove access at any time in your Google Account settings under "Third-party apps &amp; services." You can download a full copy of your data at any time from within the App.</p>
     <p>You may request deletion of your account and all associated data by emailing <a href="mailto:masprofessionalservices.office@gmail.com">masprofessionalservices.office@gmail.com</a>. Once we've verified the request, we will permanently delete your data from our systems within 30 days, except where a limited retention period is required for legal, tax, or accounting purposes. Deleted data cannot be recovered.</p>
 
     <h2>Changes to this policy</h2>
