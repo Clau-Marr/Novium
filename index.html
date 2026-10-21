@@ -92,32 +92,58 @@ h1 em{font-style:italic;font-weight:400;color:var(--teal);}
   .hdr-note{display:none;}
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad" async defer></script>
 <script>
-  const supabaseClient = supabase.createClient(
-    'https://vgwgbpjhxugyshlezjzh.supabase.co',
-    'sb_publishable_ORhpfM5JPtpcEy01hohzLA_dpxQ6QpB'
-  );
+  // Sign-ups go through a small server function (waitlist-signup) that checks the email and
+  // that a real person submitted it (Cloudflare Turnstile) before saving anything.
+  const SIGNUP_URL = 'https://vgwgbpjhxugyshlezjzh.supabase.co/functions/v1/waitlist-signup';
+  const PUBLIC_KEY = 'sb_publishable_ORhpfM5JPtpcEy01hohzLA_dpxQ6QpB';
+  const TURNSTILE_SITE_KEY = '__TURNSTILE_SITE_KEY__';
+  const turnstileWidgets = {};
+
+  function onTurnstileLoad() {
+    ['top', 'bottom'].forEach(function (id) {
+      const el = document.getElementById(id + '-turnstile');
+      if (el && TURNSTILE_SITE_KEY.indexOf('__') !== 0) {
+        turnstileWidgets[id] = turnstile.render(el, { sitekey: TURNSTILE_SITE_KEY, theme: 'light', size: 'flexible' });
+      }
+    });
+  }
 
   async function joinWaitlist(event, formId) {
     event.preventDefault();
     const emailInput = document.getElementById(formId + '-email');
     const statusMsg = document.getElementById(formId + '-status');
     const email = emailInput.value.trim();
-
     if (!email) return;
 
-    statusMsg.textContent = 'Submitting...';
-
-    const { error } = await supabaseClient.from('waitlist').insert([{ email: email }]);
-
-    if (error) {
-      statusMsg.textContent = "Something went wrong. Please try again.";
-      console.error(error);
-    } else {
-      statusMsg.textContent = "You're on the list! We'll email you at launch.";
-      emailInput.value = '';
+    const website = document.getElementById(formId + '-website').value; // hidden trap field: people never fill it in
+    const widget = turnstileWidgets[formId];
+    const token = widget !== undefined ? turnstile.getResponse(widget) : '';
+    if (!token) {
+      statusMsg.textContent = 'One moment — we\u2019re checking that you\u2019re a person. Please try again in a few seconds.';
+      return;
     }
+
+    statusMsg.textContent = 'Submitting...';
+    try {
+      const resp = await fetch(SIGNUP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': PUBLIC_KEY, 'Authorization': 'Bearer ' + PUBLIC_KEY },
+        body: JSON.stringify({ email: email, token: token, website: website })
+      });
+      const data = await resp.json().catch(function () { return {}; });
+      if (resp.ok && data.ok) {
+        statusMsg.textContent = "You're on the list! We'll email you at launch.";
+        emailInput.value = '';
+      } else {
+        statusMsg.textContent = data.error || 'Something went wrong. Please try again.';
+      }
+    } catch (e) {
+      statusMsg.textContent = 'Something went wrong. Please try again.';
+      console.error(e);
+    }
+    if (widget !== undefined) turnstile.reset(widget);
   }
 </script></head>
 <body>
@@ -138,8 +164,10 @@ h1 em{font-style:italic;font-weight:400;color:var(--teal);}
     <div class="cta-row">
     <form onsubmit="joinWaitlist(event, 'top')" style="display:flex;gap:8px;flex-wrap:wrap;">
   <input type="email" id="top-email" required placeholder="you@email.com" style="padding:10px 14px;border-radius:6px;border:1px solid #ccc;flex:1;min-width:200px;">
+  <input type="text" id="top-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
   <button type="submit" style="padding:10px 20px;border-radius:6px;background:#1a7a6e;color:white;border:none;cursor:pointer;">Get notified at launch →</button>
 </form>
+<div id="top-turnstile" style="margin-top:10px;"></div>
 <div id="top-status" style="font-size:13px;margin-top:8px;"></div>
     </div>
     <div class="cta-hint">No spam — just one email when it's ready.</div>
@@ -192,8 +220,10 @@ h1 em{font-style:italic;font-weight:400;color:var(--teal);}
   <p>Novium started as one interpreter's own invoicing system — refined through real assignments, real agencies, and real payments before anyone else touched it.</p>
   <form onsubmit="joinWaitlist(event, 'bottom')" style="display:flex;gap:8px;flex-wrap:wrap;">
   <input type="email" id="bottom-email" required placeholder="you@email.com" style="padding:10px 14px;border-radius:6px;border:1px solid #ccc;flex:1;min-width:200px;">
+  <input type="text" id="bottom-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
   <button type="submit" style="padding:10px 20px;border-radius:6px;background:#1a7a6e;color:white;border:none;cursor:pointer;">Get notified at launch →</button>
 </form>
+<div id="bottom-turnstile" style="margin-top:10px;"></div>
 <div id="bottom-status" style="font-size:13px;margin-top:8px;"></div>
 </div>
 
