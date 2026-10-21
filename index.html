@@ -114,8 +114,10 @@ h1 em{font-style:italic;font-weight:400;color:var(--teal);}
     event.preventDefault();
     const emailInput = document.getElementById(formId + '-email');
     const statusMsg = document.getElementById(formId + '-status');
+    const nameInput = document.getElementById(formId + '-name');
+    const name = nameInput.value.trim();
     const email = emailInput.value.trim();
-    if (!email) return;
+    if (!email || !name) return;
 
     const website = document.getElementById(formId + '-website').value; // hidden trap field: people never fill it in
     const widget = turnstileWidgets[formId];
@@ -130,12 +132,13 @@ h1 em{font-style:italic;font-weight:400;color:var(--teal);}
       const resp = await fetch(SIGNUP_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'apikey': PUBLIC_KEY, 'Authorization': 'Bearer ' + PUBLIC_KEY },
-        body: JSON.stringify({ email: email, token: token, website: website })
+        body: JSON.stringify({ name: name, email: email, token: token, website: website })
       });
       const data = await resp.json().catch(function () { return {}; });
       if (resp.ok && data.ok) {
         statusMsg.textContent = "You're on the list! We'll email you at launch.";
         emailInput.value = '';
+        nameInput.value = '';
       } else {
         statusMsg.textContent = data.error || 'Something went wrong. Please try again.';
       }
@@ -163,6 +166,7 @@ h1 em{font-style:italic;font-weight:400;color:var(--teal);}
     <p class="sub">Novium reads your calendar and turns it straight into accurate, agency-ready invoices — rate cards, minimum-hour guarantees, and mileage included automatically. Built for freelance language interpreters, by one.</p>
     <div class="cta-row">
     <form onsubmit="joinWaitlist(event, 'top')" style="display:flex;gap:8px;flex-wrap:wrap;">
+  <input type="text" id="top-name" required maxlength="100" autocomplete="name" placeholder="Your name" style="padding:10px 14px;border-radius:6px;border:1px solid #ccc;flex:1;min-width:150px;">
   <input type="email" id="top-email" required placeholder="you@email.com" style="padding:10px 14px;border-radius:6px;border:1px solid #ccc;flex:1;min-width:200px;">
   <input type="text" id="top-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
   <button type="submit" style="padding:10px 20px;border-radius:6px;background:#1a7a6e;color:white;border:none;cursor:pointer;">Get notified at launch →</button>
@@ -219,6 +223,7 @@ h1 em{font-style:italic;font-weight:400;color:var(--teal);}
   <h2>Built while doing the work.</h2>
   <p>Novium started as one interpreter's own invoicing system — refined through real assignments, real agencies, and real payments before anyone else touched it.</p>
   <form onsubmit="joinWaitlist(event, 'bottom')" style="display:flex;gap:8px;flex-wrap:wrap;">
+  <input type="text" id="bottom-name" required maxlength="100" autocomplete="name" placeholder="Your name" style="padding:10px 14px;border-radius:6px;border:1px solid #ccc;flex:1;min-width:150px;">
   <input type="email" id="bottom-email" required placeholder="you@email.com" style="padding:10px 14px;border-radius:6px;border:1px solid #ccc;flex:1;min-width:200px;">
   <input type="text" id="bottom-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
   <button type="submit" style="padding:10px 20px;border-radius:6px;background:#1a7a6e;color:white;border:none;cursor:pointer;">Get notified at launch →</button>
